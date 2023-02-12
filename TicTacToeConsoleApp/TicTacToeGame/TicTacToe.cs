@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 
 namespace TicTacToeConsoleApp.TicTacToeGame
 {
@@ -33,6 +34,9 @@ namespace TicTacToeConsoleApp.TicTacToeGame
         }
 
         [JsonProperty]
+        private int[] Score { get; set; }
+
+        [JsonProperty]
         private GameBoard Board { get; set; }
 
         private char CurrentSymbol
@@ -45,25 +49,41 @@ namespace TicTacToeConsoleApp.TicTacToeGame
 
         private string CurrentStepValue { get; set; }
 
-        public TicTacToe(int playersTurn, char[] playingSymbols, GameBoard board)
+        public TicTacToe(int playersTurn, char[] playingSymbols, GameBoard board, int[] score)
         {
             PlayersTurn = playersTurn;
             PlayingSymbols = playingSymbols;
             Board = board;
+
+            if (score == null)
+                Score = new int[] { 0, 0 };
+            else 
+                Score = score;
         }
 
         public void Start()
         {
-            Board.PrintBoard(PlayingSymbols, PlayersTurn, false);
+            Board.PrintBoard(PlayingSymbols, Score, PlayersTurn, false);
             CurrentStepValue = Board.ChooseCell();
-            int gameIsOver = Board.CheckIfGameIsOver(PlayingSymbols);
+            int roundIsOver = Board.CheckIfGameIsOver(PlayingSymbols);
 
-            while (gameIsOver == -1)
+            while (roundIsOver == -1)
             {
-                gameIsOver = Step(CurrentStepValue);
+                roundIsOver = Step(CurrentStepValue);
             }
 
-            Board.GameIsOver(gameIsOver);
+            if(roundIsOver == 0 || roundIsOver == 1)
+                Score[0] += 1;
+            else if(roundIsOver == 0 || roundIsOver == 2)
+                Score[1] += 1;
+
+            if (Board.RoundIsOver(roundIsOver) == true)
+            {
+                Array.Reverse(playingSymbols);
+                Board.SetDefaultBoard();
+                Start();
+            }
+                
         }
 
         public int Step(string numberOfCell)
@@ -80,6 +100,7 @@ namespace TicTacToeConsoleApp.TicTacToeGame
                 {
                     PlayersTurn = saving.PlayersTurn;
                     PlayingSymbols = saving.PlayingSymbols;
+                    Score = saving.Score;
                     Board.Board = saving.Board.Board;
                 }
             }
@@ -99,7 +120,7 @@ namespace TicTacToeConsoleApp.TicTacToeGame
                 }
             }
 
-            Board.PrintBoard(PlayingSymbols, PlayersTurn);
+            Board.PrintBoard(PlayingSymbols, Score, PlayersTurn);
 
             int endOfGame = Board.CheckIfGameIsOver(PlayingSymbols);
             if (endOfGame != -1)

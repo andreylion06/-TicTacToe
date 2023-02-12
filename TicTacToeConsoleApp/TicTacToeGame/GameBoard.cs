@@ -16,6 +16,11 @@ namespace TicTacToeConsoleApp.TicTacToeGame
 
         public GameBoard()
         {
+            SetDefaultBoard();
+        }
+
+        public void SetDefaultBoard()
+        {
             Board = new char[] { '1', '2', '3', '4', '5', '6', '7', '8', '9' };
         }
 
@@ -30,9 +35,9 @@ namespace TicTacToeConsoleApp.TicTacToeGame
         }
 
         //It is possible to set different functionality depending on UI
-        public abstract void PrintBoard(char[] playingSymbols, int playersTurn, bool consoleClear = true);
+        public abstract void PrintBoard(char[] playingSymbols, int[] score, int playersTurn, bool consoleClear = true);
         public abstract string ChooseCell(string exception = null);
-        public abstract void GameIsOver(int gameResult);
+        public abstract bool RoundIsOver(int gameResult);
 
         public int CheckIfGameIsOver(char[] symbols)
         {

@@ -9,14 +9,14 @@ namespace TicTacToeConsoleApp.TicTacToeGame
 
         public GameBoardConsole() : base()  { }
 
-        public override void PrintBoard(char[] playingSymbols, int playersTurn, bool consoleClear = true)
+        public override void PrintBoard(char[] playingSymbols, int[] score, int playersTurn, bool consoleClear = true)
         {
             if(consoleClear)
                 Console.Clear();
 
             Console.WriteLine("Let's play Tic Tac Toe!");
-            Console.WriteLine("Player 1: X");
-            Console.WriteLine("Player 2: 0\n\n");
+            Console.WriteLine($"Player 1: {playingSymbols[0]} [{score[0]}]");
+            Console.WriteLine($"Player 2: {playingSymbols[1]} [{score[1]}]\n\n");
 
             Console.WriteLine($"Player {playersTurn}'s turn. Select from 1 to 9 from the game board.\n\n");
 
@@ -45,12 +45,15 @@ namespace TicTacToeConsoleApp.TicTacToeGame
             return inputVal;
         }
 
-        public override void GameIsOver(int gameResult)
+        public override bool RoundIsOver(int gameResult)
         {
             if (gameResult != 0)
                 ColorOutputConsole.Print($"Player {gameResult} wins!", ConsoleColor.Green);
             else
-                ColorOutputConsole.Print($"It's a draw!", ConsoleColor.Blue);
+                ColorOutputConsole.Print("It's a draw!", ConsoleColor.Blue);
+
+            ColorOutputConsole.Print("Do you want to play again? (y/n)", ConsoleColor.DarkYellow);
+            return Console.ReadLine().ToLower() == "y";
         }
     }
 }
