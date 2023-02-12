@@ -1,9 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TicTacToeConsoleApp.TicTacToeGame
 {
@@ -33,7 +30,7 @@ namespace TicTacToeConsoleApp.TicTacToeGame
         }
 
         //It is possible to set different functionality depending on UI
-        public abstract void PrintBoard(char[] playingSymbols, int playersTurn);
+        public abstract void PrintBoard(char[] playingSymbols, int playersTurn, bool consoleClear = true);
         public abstract string ChooseCell(string exception = null);
         public abstract void GameIsOver(int gameResult);
 

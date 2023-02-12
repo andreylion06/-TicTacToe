@@ -1,17 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TicTacToeConsoleApp.HelperClasses;
 
 namespace TicTacToeConsoleApp.TicTacToeGame
 {
     public class GameBoardConsole : GameBoard
     {
-        public override void PrintBoard(char[] playingSymbols, int playersTurn)
+        public GameBoardConsole(char[] board) : base(board) { }
+
+        public GameBoardConsole() : base()  { }
+
+        public override void PrintBoard(char[] playingSymbols, int playersTurn, bool consoleClear = true)
         {
-            Console.Clear();
+            if(consoleClear)
+                Console.Clear();
+
             Console.WriteLine("Let's play Tic Tac Toe!");
             Console.WriteLine("Player 1: X");
             Console.WriteLine("Player 2: 0\n\n");

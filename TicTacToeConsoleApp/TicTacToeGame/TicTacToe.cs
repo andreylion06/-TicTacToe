@@ -1,10 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TicTacToeConsoleApp.HelperClasses;
 
 namespace TicTacToeConsoleApp.TicTacToeGame
 {
@@ -60,7 +54,7 @@ namespace TicTacToeConsoleApp.TicTacToeGame
 
         public void Start()
         {
-            Board.PrintBoard(PlayingSymbols, PlayersTurn);
+            Board.PrintBoard(PlayingSymbols, PlayersTurn, false);
             CurrentStepValue = Board.ChooseCell();
             int gameIsOver = Board.CheckIfGameIsOver(PlayingSymbols);
 

@@ -28,12 +28,7 @@ namespace TicTacToeConsoleApp.TicTacToeGame
             if (!File.Exists(saveFilePath))
                 return null;
 
-            //var settings = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All };
-
             string json = File.ReadAllText(saveFilePath);
-            //var deserializedObj = JsonConvert.DeserializeObject<SavingGame>(json);
-
-
             if (TryParseJson(json, out TicTacToeSavingModel game))
             {
                 return game;
