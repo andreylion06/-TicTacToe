@@ -9,10 +9,11 @@ namespace TicTacToeConsoleApp.TicTacToeGame
 
         public GameBoardConsole() : base()  { }
 
-        public override void PrintBoard(char[] playingSymbols, int[] score, int playersTurn, bool consoleClear = true)
+        public override void PrintBoard(char[] playingSymbols, int[] score, int playersTurn, bool loadingException = false)
         {
-            if(consoleClear)
-                Console.Clear();
+            Console.Clear();
+            if(loadingException)
+                ColorOutputConsole.Print("No saved game was found!", ConsoleColor.DarkYellow);
 
             Console.WriteLine("Let's play Tic Tac Toe!");
             Console.WriteLine($"Player 1: {playingSymbols[0]} [{score[0]}]");

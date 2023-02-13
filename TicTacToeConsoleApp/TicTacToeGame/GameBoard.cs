@@ -35,7 +35,7 @@ namespace TicTacToeConsoleApp.TicTacToeGame
         }
 
         //It is possible to set different functionality depending on UI
-        public abstract void PrintBoard(char[] playingSymbols, int[] score, int playersTurn, bool consoleClear = true);
+        public abstract void PrintBoard(char[] playingSymbols, int[] score, int playersTurn, bool loadingException = false);
         public abstract string ChooseCell(string exception = null);
         public abstract bool RoundIsOver(int gameResult);
 

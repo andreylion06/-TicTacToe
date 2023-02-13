@@ -48,6 +48,7 @@ namespace TicTacToeConsoleApp.TicTacToeGame
         }
 
         private string CurrentStepValue { get; set; }
+        private bool LoadException { get; set; }
 
         public TicTacToe(int playersTurn, char[] playingSymbols, GameBoard board, int[] score)
         {
@@ -61,9 +62,14 @@ namespace TicTacToeConsoleApp.TicTacToeGame
                 Score = score;
         }
 
+        public TicTacToe() : this(1, null, new GameBoardConsole(), null) { }
+
         public void Start()
         {
-            Board.PrintBoard(PlayingSymbols, Score, PlayersTurn, false);
+            Board.PrintBoard(PlayingSymbols, Score, PlayersTurn, LoadException);
+            if (LoadException == true) 
+                LoadException = false;
+
             CurrentStepValue = Board.ChooseCell();
             int roundIsOver = Board.CheckIfGameIsOver(PlayingSymbols);
 
@@ -95,14 +101,7 @@ namespace TicTacToeConsoleApp.TicTacToeGame
                 GameSaving.MakeSave(this);
             else if (numberOfCell.ToLower() == "l")
             {
-                TicTacToeSavingModel saving = GameSaving.LoadSave();
-                if (saving != null)
-                {
-                    PlayersTurn = saving.PlayersTurn;
-                    PlayingSymbols = saving.PlayingSymbols;
-                    Score = saving.Score;
-                    Board.Board = saving.Board.Board;
-                }
+                LoadFromSaving();
             }
             else
             {
@@ -120,7 +119,9 @@ namespace TicTacToeConsoleApp.TicTacToeGame
                 }
             }
 
-            Board.PrintBoard(PlayingSymbols, Score, PlayersTurn);
+            Board.PrintBoard(PlayingSymbols, Score, PlayersTurn, LoadException);
+            if (LoadException == true) 
+                LoadException = false;
 
             int endOfGame = Board.CheckIfGameIsOver(PlayingSymbols);
             if (endOfGame != -1)
@@ -128,6 +129,20 @@ namespace TicTacToeConsoleApp.TicTacToeGame
 
             CurrentStepValue = Board.ChooseCell(exception);
             return -1;
+        }
+
+        public void LoadFromSaving()
+        {
+            TicTacToeSavingModel saving = GameSaving.LoadSave();
+            if (saving != null)
+            {
+                PlayersTurn = saving.PlayersTurn;
+                PlayingSymbols = saving.PlayingSymbols;
+                Score = saving.Score;
+                Board.Board = saving.Board.Board;
+            }
+            else
+                LoadException = true;
         }
     }
 }
