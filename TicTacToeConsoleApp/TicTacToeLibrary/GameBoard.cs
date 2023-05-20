@@ -7,10 +7,13 @@ namespace TicTacToeConsoleApp.TicTacToeLibrary
 {
     public class GameBoard
     {
+        [JsonProperty]
         public readonly char[] DefaultField = { '1', '2', '3', '4', '5', '6', '7', '8', '9' };
         // In this class, occupied cells are marked with their own characters.
         // When outputting, we take symbols from "main" class
+        [JsonProperty]
         private Dictionary<int, char> _fieldSymbols = new() { { 1, 'f' }, { 2, 's' } };
+        [JsonProperty]
         public char[] Field { get; private set; }
 
         public GameBoard()

@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using TicTacToeConsoleApp.HelperClasses;
 using TicTacToeConsoleApp.TicTacToeLibrary;
 
@@ -8,14 +9,20 @@ namespace TicTacToeLibrary.TicTacToeLibrary
 {    
     public class TicTacToeGame
     {
+        [JsonProperty]
         private Dictionary<int, char> _playingSymbols = new() { { 1, 'X' }, { 2, 'O' } };
+        [JsonProperty]
         private Dictionary<int, int> _score = new() { { 1, 0 }, { 2, 0 } };
+        [JsonProperty]
         public int PlayersTurn { get; private set; }
+        [JsonProperty]
+        private int _firstMove = 1;
+        [JsonProperty]
         private GameBoard _board;
 
         public TicTacToeGame(GameBoard board)
         {
-            PlayersTurn = 1;
+            PlayersTurn = _firstMove;
             _board = board;
         }
 
@@ -32,6 +39,18 @@ namespace TicTacToeLibrary.TicTacToeLibrary
                 Console.Write("-->");
                 string selectedCellStr = Console.ReadLine();
                 int selectedCell;
+
+                if (selectedCellStr.ToLower() == "s")
+                {
+                    GameSaving.SaveToFile(this);
+                    continue;
+                }
+                if (selectedCellStr.ToLower() == "l")
+                {
+                    GameSaving.LoadFromFile(this);
+                    continue;
+                }
+
                 if (!int.TryParse(selectedCellStr, out selectedCell))
                     message = "Entered invalid cell number!";
                 else
@@ -46,7 +65,7 @@ namespace TicTacToeLibrary.TicTacToeLibrary
                     }
                 }
                 if (string.IsNullOrEmpty(message))
-                    this.NextTurn();
+                    PlayersTurn = (PlayersTurn == 1 ? 2 : 1);
 
                 result = TicTacToeRules.CheckIfGameIsOver(
                     _board.GenerateFieldWithSymbols(_playingSymbols), 
@@ -63,12 +82,12 @@ namespace TicTacToeLibrary.TicTacToeLibrary
                 RestartGame();
         }
 
-        private void PrintScreen(string message)
+        public void PrintScreen(string message)
         {
             Console.Clear();
 
             if (!string.IsNullOrEmpty(message))
-                ColorOutputConsole.Print(message, ConsoleColor.Yellow);
+                ColorOutputConsole.Print($"{message}\n", ConsoleColor.Yellow);
 
             Console.WriteLine("Let's play Tic Tac Toe!\n\n");
             Console.WriteLine($"Player 1: {_playingSymbols[1]} [{_score[1]}]");
@@ -98,18 +117,9 @@ namespace TicTacToeLibrary.TicTacToeLibrary
         private void RestartGame()
         {
             _board.SetFieldToDefault();
-            SwapPlayingSymbols();
+            _firstMove = (_firstMove == 1 ? 2 : 1);
+            PlayersTurn = _firstMove;
             Start();
-        }
-
-        private void NextTurn()
-        {
-            PlayersTurn = (PlayersTurn == 1 ? 2 : 1);
-        }
-
-        private void SwapPlayingSymbols()
-        {
-            (_playingSymbols[1], _playingSymbols[2]) = (_playingSymbols[2], _playingSymbols[1]);
         }
     }
 }
