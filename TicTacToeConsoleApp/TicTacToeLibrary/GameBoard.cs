@@ -65,6 +65,11 @@ namespace TicTacToeConsoleApp.TicTacToeLibrary
             Field[numberOfCell - 1] = _fieldSymbols[playersNumber];
         }
 
+        public void SetToDefaultCell(int numberOfCell)
+        {
+            Field[numberOfCell - 1] = (char)(numberOfCell + 48);
+        }
+
         public bool CheckCellIsFree(int numberOfCell)
         {
             if (CheckValidNumberOfCell(numberOfCell) == false)
@@ -76,6 +81,6 @@ namespace TicTacToeConsoleApp.TicTacToeLibrary
         public bool CheckValidNumberOfCell(int numberOfCell)
         {
             return numberOfCell - 1 >= 0 && numberOfCell <= DefaultField.Length;
-        }        
+        }  
     }
 }
