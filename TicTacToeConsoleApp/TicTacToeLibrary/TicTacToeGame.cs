@@ -1,7 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.VisualBasic;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using TicTacToeConsoleApp.HelperClasses;
 using TicTacToeConsoleApp.TicTacToeLibrary;
 
@@ -19,6 +21,8 @@ namespace TicTacToeLibrary.TicTacToeLibrary
         private int _firstMove = 1;
         [JsonProperty]
         private GameBoard _board;
+        [JsonProperty]
+        private int _lastTurn = -1;
 
         public TicTacToeGame(GameBoard board)
         {
@@ -50,6 +54,18 @@ namespace TicTacToeLibrary.TicTacToeLibrary
                     GameSaving.LoadFromFile(this);
                     continue;
                 }
+                if (selectedCellStr.ToLower() == "u")
+                {
+                    if (_lastTurn != -1)
+                    {
+                        _board.SetToDefaultCell(_lastTurn);
+                        _lastTurn = -1;
+                        NextPlayer();
+                    }
+                    else
+                        message = "Information about the previous move is missing";
+                    continue;
+                }
 
                 if (!int.TryParse(selectedCellStr, out selectedCell))
                     message = "Entered invalid cell number!";
@@ -65,7 +81,10 @@ namespace TicTacToeLibrary.TicTacToeLibrary
                     }
                 }
                 if (string.IsNullOrEmpty(message))
-                    PlayersTurn = (PlayersTurn == 1 ? 2 : 1);
+                {
+                    _lastTurn = selectedCell;
+                    NextPlayer();
+                }
 
                 result = TicTacToeRules.CheckIfGameIsOver(
                     _board.GenerateFieldWithSymbols(_playingSymbols), 
@@ -117,9 +136,15 @@ namespace TicTacToeLibrary.TicTacToeLibrary
         private void RestartGame()
         {
             _board.SetFieldToDefault();
+            _lastTurn = -1;
             _firstMove = (_firstMove == 1 ? 2 : 1);
             PlayersTurn = _firstMove;
             Start();
+        }
+
+        public void NextPlayer()
+        {
+            PlayersTurn = (PlayersTurn == 1 ? 2 : 1);
         }
     }
 }
