@@ -1,7 +1,5 @@
-﻿using System;
-using System.Linq;
-using TicTacToeConsoleApp.HelperClasses;
-using TicTacToeConsoleApp.TicTacToeGame;
+﻿using TicTacToeConsoleApp.TicTacToeLibrary;
+using TicTacToeLibrary.TicTacToeLibrary;
 
 namespace TicTacToeSolution
 {
@@ -9,11 +7,8 @@ namespace TicTacToeSolution
     {
         static void Main(string[] args)
         {
-            TicTacToe game = new TicTacToe(9, new char[] { 'X', 'O' }, new GameBoardConsole(), null);
-
-            if (args.Contains("--load-saved"))
-                game.LoadFromSaving();
-
+            TicTacToeGame game = new TicTacToeGame(new GameBoard());
+            
             game.Start();
         }
     }

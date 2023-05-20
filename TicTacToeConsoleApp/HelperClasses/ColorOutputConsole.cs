@@ -12,7 +12,7 @@ namespace TicTacToeConsoleApp.HelperClasses
         {
             Console.ForegroundColor = foreGround;
             Console.BackgroundColor = backGround;
-            Console.WriteLine(str);
+            Console.Write(str);
             Console.ResetColor();
         }
     }
